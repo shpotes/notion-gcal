@@ -77,6 +77,6 @@ def get_events(
 
     output_events = []
     for event in events:
-        output_events.append(Event.from_dict(event))
+        output_events.append(Event.from_gdict(event))
 
     return output_events

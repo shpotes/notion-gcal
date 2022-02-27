@@ -115,7 +115,7 @@ class Event:
         }
 
     @classmethod
-    def from_dict(cls, event: dict) -> 'Event':
+    def from_gdict(cls, event: dict) -> 'Event':
         start_date = event['start'].get('dateTime', event['start'].get('date'))
         end_date = event['end'].get('dateTime', event['end'].get('date'))
         if 'hangoutLink' in event:
@@ -131,4 +131,16 @@ class Event:
             title=event['summary'],
             location=location,
             gcal_id=event['id']
+        )
+
+    @classmethod
+    def from_notion_response(cls, response: dict) -> 'Event':
+        info = response["properties"]
+
+        return cls(
+            start=info["Date"]["date"]["start"],
+            end=info["Date"]["date"]["end"],
+            title=info["Event"]["title"][0]["text"]["content"],
+            location=info["Meeting"]["url"] if "Meeting" in info else None,
+            gcal_id=info["gcal_id"]["rich_text"][0]["plain_text"]
         )

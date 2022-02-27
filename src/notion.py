@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 import json
 from pathlib import Path
 
@@ -40,3 +40,11 @@ def create_event(
         },
         **event.to_notion_page()
     )
+
+
+def get_events(
+    service: Client,
+    database_id: str,
+) -> List[Event]:
+    response = service.databases.query(database_id)
+    return [Event.from_notion_response(res) for res in response["results"]]
